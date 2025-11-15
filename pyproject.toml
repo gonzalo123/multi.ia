@@ -1,0 +1,24 @@
+[project]
+name = "multi-ia"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Gonzalo Ayuso",email = "gonzalo123@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<4.0.0"
+dependencies = [
+    "fastapi (>=0.121.2,<0.122.0)",
+    "chainlit (>=2.9.0,<3.0.0)",
+    "strands-agents-tools (>=0.2.15,<0.3.0)",
+    "bedrock-agentcore (>=1.0.6,<2.0.0)",
+    "uvicorn (>=0.38.0,<0.39.0)",
+]
+
+[tool.poetry]
+packages = [{include = "multi"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
