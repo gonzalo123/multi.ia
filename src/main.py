@@ -114,6 +114,7 @@ async def handle_message(message: cl.Message):
                 await msg.stream_token("\n")
                 message_history.append(event["message"])
 
+
         await msg.update()
 
     task = asyncio.create_task(user_task(DEBUG))

@@ -206,7 +206,7 @@ Flow:
 
 Or multi-domain queries:
 
-**User**: "Did weather conditions affect our shipment delays last month?"
+**User**: "Did weather conditions affect our shipment delays yesterday?"
 
 ```
 Flow:
@@ -219,7 +219,7 @@ Flow:
 
 And complex analytics:
 
-**User**: "Analyze production efficiency trends and correlate with weather and logistics performance"
+**User**: "Analyze production efficiency trends and correlate with weather and logistics performance based in yesterday's data."
 
 ```
 Flow:
