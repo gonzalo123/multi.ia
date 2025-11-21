@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, date, timedelta
 from typing import List, Optional, Dict, Any
 
-import requests  # mantener import para consistencia con otros tools aunque no se use
+import requests
 from strands import tool
 
 from settings import Dbnames

@@ -3,48 +3,48 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
-# Modelos de lecturas meteorológicas
+# Meteorological reading models
 class TemperatureReading(BaseModel):
-    """Lectura de temperatura a 2 metros"""
+    """Temperature reading at 2 meters"""
     time: datetime = Field(..., description="Timestamp")
-    value: float = Field(description="Temperatura en °C")
+    value: float = Field(description="Temperature in °C")
 
 
 class HumidityReading(BaseModel):
-    """Lectura de humedad relativa a 2 metros"""
+    """Relative humidity reading at 2 meters"""
     time: datetime = Field(..., description="Timestamp")
-    value: int = Field(..., ge=0, le=100, description="Humedad relativa en %")
+    value: int = Field(..., ge=0, le=100, description="Relative humidity in %")
 
 
 class ApparentTemperatureReading(BaseModel):
-    """Lectura de temperatura aparente"""
+    """Apparent temperature reading"""
     time: datetime = Field(..., description="Timestamp")
-    value: float = Field(..., description="Temperatura aparente en °C")
+    value: float = Field(..., description="Apparent temperature in °C")
 
 
 class PrecipitationReading(BaseModel):
-    """Lectura de precipitación"""
+    """Precipitation reading"""
     time: datetime = Field(..., description="Timestamp")
-    value: float = Field(..., ge=0, description="Precipitación en mm")
+    value: float = Field(..., ge=0, description="Precipitation in mm")
 
 
 class EvapotranspirationReading(BaseModel):
-    """Lectura de evapotranspiración"""
+    """Evapotranspiration reading"""
     time: datetime = Field(..., description="Timestamp")
-    value: float = Field(..., description="Evapotranspiración en mm")
+    value: float = Field(..., description="Evapotranspiration in mm")
 
 
 class SurfacePressureReading(BaseModel):
-    """Lectura de presión superficial"""
+    """Surface pressure reading"""
     time: datetime = Field(..., description="Timestamp")
-    value: float = Field(..., gt=0, description="Presión superficial en hPa")
+    value: float = Field(..., gt=0, description="Surface pressure in hPa")
 
 
 class MeteoData(BaseModel):
-    """Modelo para almacenar datos meteorológicos"""
-    temperature: list[TemperatureReading] = Field(..., description="Lista de lecturas de temperatura")
-    humidity: list[HumidityReading] = Field(..., description="Lista de lecturas de humedad")
-    apparent_temperature: list[ApparentTemperatureReading] = Field(..., description="Lista de lecturas de temperatura aparente")
-    precipitation: list[PrecipitationReading] = Field(..., description="Lista de lecturas de precipitación")
-    evapotranspiration: list[EvapotranspirationReading] = Field(..., description="Lista de lecturas de evapotranspiración")
-    surface_pressure: list[SurfacePressureReading] = Field(..., description="Lista de lecturas de presión superficial")
+    """Model to store meteorological data"""
+    temperature: list[TemperatureReading] = Field(..., description="List of temperature readings")
+    humidity: list[HumidityReading] = Field(..., description="List of humidity readings")
+    apparent_temperature: list[ApparentTemperatureReading] = Field(..., description="List of apparent temperature readings")
+    precipitation: list[PrecipitationReading] = Field(..., description="List of precipitation readings")
+    evapotranspiration: list[EvapotranspirationReading] = Field(..., description="List of evapotranspiration readings")
+    surface_pressure: list[SurfacePressureReading] = Field(..., description="List of surface pressure readings")

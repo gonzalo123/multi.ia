@@ -39,8 +39,15 @@ AWS_PROFILE_NAME = os.getenv('AWS_PROFILE_NAME', False)
 AWS_REGION = os.getenv('AWS_REGION')
 AWS_ASSUME_ROLE = os.getenv('AWS_ASSUME_ROLE', False)
 
+
 class Models(StrEnum):
     CLAUDE_45 = 'eu.anthropic.claude-sonnet-4-5-20250929-v1:0'
 
+
 MY_LATITUDE = float(os.getenv('MY_LATITUDE'))
 MY_LONGITUDE = float(os.getenv('MY_LONGITUDE'))
+
+PG_CONNECTION_STRING = (f"postgresql+asyncpg://"
+                        f"{os.getenv('LOCAL_DB_USER')}:{os.getenv('LOCAL_DB_PASS')}@"
+                        f"{os.getenv('LOCAL_DB_HOST')}:{os.getenv('LOCAL_DB_PORT')}/"
+                        f"{os.getenv('LOCAL_DB_NAME')}")

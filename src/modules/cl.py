@@ -1,5 +1,6 @@
 import logging
-from typing import Any, List
+from typing import Any, List, Callable
+from functools import wraps
 
 import chainlit as cl
 import jwt
@@ -15,6 +16,48 @@ from strands_tools.code_interpreter import AgentCoreCodeInterpreter
 from settings import AWS_REGION, Models
 
 logger = logging.getLogger(__name__)
+
+
+def stream_to_step(tool_name: str):
+    """
+    Decorator to capture streaming output from async generator tools and send to Chainlit Step.
+
+    Follows Chainlit's official pattern for streaming LLM outputs.
+
+    Args:
+        tool_name: Name of the tool (used to find the corresponding Step)
+    """
+    def decorator(func: Callable):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            # Get the Step for this tool if it exists
+            step: cl.Step = cl.user_session.get(f"step_{tool_name}")
+
+            accumulated_content = ""
+
+            # Call the original async generator function
+            async for event in func(*args, **kwargs):
+                # Extract delta.text if available (similar to OpenAI's delta.content pattern)
+                if isinstance(event, dict) and 'delta' in event:
+                    delta = event['delta']
+                    if isinstance(delta, dict) and 'text' in delta:
+                        text_content = delta['text']
+
+                        # Stream the output of the step (following Chainlit's official pattern)
+                        if text_content and step:
+                            await step.stream_token(text_content)
+                            accumulated_content += text_content
+
+                # Always yield the original event for the agent to consume
+                yield event
+
+            # Update the Step with final content
+            if step:
+                step.output = accumulated_content if accumulated_content else "✓ Completed"
+                await step.update()
+
+        return wrapper
+    return decorator
 
 
 def auth_callback(headers: dict, secret, jwt_algorithm) -> Any:

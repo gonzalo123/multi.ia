@@ -3,6 +3,7 @@ import logging
 from typing import Dict, Optional
 
 import chainlit as cl
+from chainlit.data.sql_alchemy import SQLAlchemyDataLayer
 from strands.hooks import (
     HookProvider, HookRegistry, BeforeToolCallEvent,
     AfterToolCallEvent)
@@ -11,7 +12,7 @@ from modules.cl import auth_callback, get_agent, get_orchestrator_tools
 from modules.prompts import MAIN_SYSTEM_PROMPT
 from settings import (
     ENVIRONMENT, SECRET,
-    JWT_ALGORITHM, FAKE_USER, DEBUG)
+    JWT_ALGORITHM, FAKE_USER, DEBUG, PG_CONNECTION_STRING)
 
 logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -28,7 +29,7 @@ class LoggingHooks(HookProvider):
 
     async def before_tool(self, event: BeforeToolCallEvent) -> None:
         step = cl.Step(
-            name=f"Using tool: {event.tool_use['name']}",
+            name=f"{event.tool_use['name']}",
             type="tool",
         )
         await step.send()
@@ -38,7 +39,8 @@ class LoggingHooks(HookProvider):
     async def after_tool(self, event: AfterToolCallEvent) -> None:
         step: cl.Step = cl.user_session.get(f"step_{event.tool_use['name']}")
         if step:
-            await step.remove()
+            # Keep the step visible with final content instead of removing it
+            await step.update()
         logger.debug(f"Request completed for {event.tool_use['name']}")
 
 
@@ -84,6 +86,11 @@ async def on_chat_end():
         task.cancel()
 
 
+@cl.data_layer
+def get_data_layer():
+    return SQLAlchemyDataLayer(conninfo=PG_CONNECTION_STRING)
+
+
 @cl.on_message
 async def handle_message(message: cl.Message):
     agent = cl.user_session.get("agent")
@@ -96,8 +103,8 @@ async def handle_message(message: cl.Message):
         await msg.send()
 
         question = message.content
-        extra = (f"Si hay algun error en alguna tool para la ejecución del agente y "
-                 f"explicame el error para que pueda corregirlo.")
+        extra = (f"If there is any error in any tool during agent execution, "
+                 f"explain the error so I can fix it.")
         question = f"{question}\n{extra}" if debug else question
 
         async for event in agent.stream_async(question):
@@ -106,8 +113,6 @@ async def handle_message(message: cl.Message):
             elif "message" in event:
                 await msg.stream_token("\n")
                 message_history.append(event["message"])
-            else:
-                ...
 
         await msg.update()
 
