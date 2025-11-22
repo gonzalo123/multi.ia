@@ -22,7 +22,7 @@ That's the architecture in a nutshell:
 │  (Routes & Synthesizes)                     │
 └────────┬─────────┬─────────┬────────────────┘
          │         │         │
-    ┌────▼────┐ ┌──▼─────┐ ┌▼──────────┐
+    ┌────▼────┐ ┌──▼─────┐ ┌─▼─────────┐
     │ Weather │ │Logistic│ │Production │
     │  Agent  │ │ Agent  │ │  Agent    │
     └────┬────┘ └──┬─────┘ └┬──────────┘
