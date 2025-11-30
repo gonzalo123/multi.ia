@@ -5,8 +5,13 @@ We can build simple AI agents that handle specific tasks quite easily today. But
 The idea is simple: **Don't build one agent to rule them all** instead, create specialized agents that excel in their domains and coordinate them through an intelligent orchestrator. The solution is an **orchestrator agent** that routes requests to **specialized sub-agents**, each with focused expertise and dedicated tools. Think of it as a smart router that understands intent and delegates accordingly.
 
 That's the core of the **Orchestrator Pattern** for multi-agent systems:
-```
-User Query → Orchestrator Agent → Specialized Agent(s) → Orchestrator → Response
+
+```mermaid
+flowchart LR
+    UQ[User Query] --> O1[Orchestrator Agent]
+    O1 --> SA["Specialized Agent(s)"]
+    SA --> O2[Orchestrator]
+    O2 --> R[Response]
 ```
 
 For our example we have three specialized agents:
