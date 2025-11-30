@@ -16,21 +16,17 @@ For our example we have three specialized agents:
 
 That's the architecture in a nutshell:
 
-```
-┌─────────────────────────────────────────────┐
-│          Orchestrator Agent                 │
-│  (Routes & Synthesizes)                     │
-└────────┬─────────┬─────────┬────────────────┘
-         │         │         │
-    ┌────▼────┐ ┌──▼─────┐ ┌─▼─────────┐
-    │ Weather │ │Logistic│ │Production │
-    │  Agent  │ │ Agent  │ │  Agent    │
-    └────┬────┘ └──┬─────┘ └┬──────────┘
-         │         │        │
-    ┌────▼────┐ ┌──▼─────┐ ┌▼──────────┐
-    │External │ │Database│ │ Database  │
-    │   API   │ │ Tools  │ │  Tools    │
-    └─────────┘ └────────┘ └───────────┘
+```mermaid
+flowchart TD
+    O["Orchestrator Agent (Routes & Synthesizes)"]
+
+    O --> W["Weather Agent"]
+    O --> L["Logistic Agent"]
+    O --> P["Production Agent"]
+
+    W --> WAPI["External API"]
+    L --> LDB["Database Tools"]
+    P --> PDB["Database Tools"]
 ```
 
 The tech stack includes:
